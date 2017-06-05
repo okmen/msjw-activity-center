@@ -27,6 +27,7 @@ public class IActivityCachedImpl implements IActivityCached{
 	 */
     @Value("${userpwd}")
     private String userpwd;
+    
     /**
      * 请求地址
      */
