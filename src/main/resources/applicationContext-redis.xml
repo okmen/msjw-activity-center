@@ -18,6 +18,7 @@
 	<property name="minEvictableIdleTimeMillis" value="60000" />
 	<property name="timeBetweenEvictionRunsMillis" value="30000" />
 	</bean>
+	
 	<bean id="choumeiShardedJedisPool" class="cn.sdk.cache.BilinShardedJedisPool">
 		<constructor-arg index="0" ref="commonJedisPoolConfig" />
 		<constructor-arg index="1" value="${redis.user-center.configstr}" />
