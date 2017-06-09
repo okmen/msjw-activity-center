@@ -100,8 +100,12 @@ public class IActivityServiceImpl implements IActivityService {
 			String userPwd = iActivityCached.getUserpwd(); 	//webservice登录密码
 			String key = iActivityCached.getKey();			//秘钥
 			
+			long start = System.currentTimeMillis();
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.getQuotaInfoByApptDate(apptDate, apptDistrict, sourceOfCertification, url, method, userId, userPwd, key);
+			long end = System.currentTimeMillis();
+			
+			logger.info("调用TransferThirdParty.getQuotaInfoByApptDate 耗时:" + (end - start));
 			
 			JSONObject jsonBody = respJson.getJSONObject("body");
 			String code = respJson.get("code").toString();
