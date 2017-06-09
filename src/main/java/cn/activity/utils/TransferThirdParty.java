@@ -169,7 +169,7 @@ public class TransferThirdParty {
 		.append("<sjhm>").append(info.getMobilePhone()).append("</sjhm>")	//手机号码                              
 		.append("<yyqy>").append(info.getApptDistrict()).append("</yyqy>")	//预约片区		1-梅沙片区,2-大鹏片区                         
 		.append("<yyrq>").append(info.getApptDate()).append("</yyrq>")		//预约日期                     
-		.append("<yysjd>").append(info.getApptDistrict()).append("</yysjd>")//预约时间段	1-0点到12点,2-12点到24点
+		.append("<yysjd>").append(info.getApptInterval()).append("</yysjd>")//预约时间段	1-0点到12点,2-12点到24点
 		.append("<yyly>").append(sourceOfCertification).append("</yyly>")	//获取来源
 		.append("<openid>").append(openId).append("</openid>")				//微信公众号唯一标识			
 		.append("<yyjs>").append("1").append("</yyjs>")						//预约角色		默认1-个人
