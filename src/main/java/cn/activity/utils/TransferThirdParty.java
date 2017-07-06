@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.activity.bean.HotelApptInfoVo;
 import cn.activity.bean.HotelInfoVo;
 import cn.activity.bean.NormalApptInfoVo;
+import cn.sdk.util.MsgCode;
 import cn.sdk.webservice.WebServiceClient;
 
 /**
@@ -200,7 +201,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelInfoByCode 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 
@@ -226,7 +234,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("loginViaHotel 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -254,7 +269,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelQuotaInfo 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -293,7 +315,14 @@ public class TransferThirdParty {
 		sb.append("</request>");
 		
 		log.info("addHotelApptInfo 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -318,7 +347,14 @@ public class TransferThirdParty {
 		
 
 		log.info("getHotelApptHistoryByDate 接口xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -347,7 +383,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelApptInfoByQueryType 接口xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -373,7 +416,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("cancelHotelApptInfo 接口xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -396,7 +446,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getApptInfoDetailByApptId 接口xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().complexWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = null;
+		try {
+			respJson = WebServiceClient.getInstance().complexWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 }

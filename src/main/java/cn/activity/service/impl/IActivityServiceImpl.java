@@ -394,6 +394,8 @@ public class IActivityServiceImpl implements IActivityService {
 				}
 				baseBean.setData(list);
 				msg = respJson.getJSONObject("msg").getJSONObject("response").getString("msg");	//成功消息描述
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				msg = MsgCode.webServiceCallMsg;
 			}else{
 				msg = respJson.getString("msg");	//失败消息描述
 			}
@@ -446,7 +448,9 @@ public class IActivityServiceImpl implements IActivityService {
 			
 			String code = respJson.getString("code");	//返回状态码
 			String msg = respJson.getString("msg");		//返回消息描述
-			
+			if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				msg = MsgCode.webServiceCallMsg;
+			}
 			baseBean.setCode(code);
 			baseBean.setMsg(msg);
 			
@@ -492,9 +496,10 @@ public class IActivityServiceImpl implements IActivityService {
 				vo.setTotalQuota(jsonBody.getString("zyype"));				//总预约配额
 				vo.setLeftQuota(jsonBody.getString("kyype"));				//可预约配额
 				baseBean.setData(vo);
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
-				//查询失败
-				baseBean.setMsg(respJson.getString("msg"));
+				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
 			}
 			baseBean.setCode(code);
 			
@@ -526,8 +531,11 @@ public class IActivityServiceImpl implements IActivityService {
 			String userPwd = iActivityCached.getUserpwd(); 	//webservice登录密码
 			String key = iActivityCached.getKey();			//秘钥
 			
+			long before = System.currentTimeMillis();
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.addHotelApptInfo(agencyCode, branchCode, apptInfoList, url, method, userId, userPwd, key);
+			long after = System.currentTimeMillis();
+			logger.info("【酒店预约信息写入耗时】: " + (after - before) + " ms");
 			
 			String code = respJson.getString("code");
 			String msg = "";
@@ -554,8 +562,10 @@ public class IActivityServiceImpl implements IActivityService {
 				}
 				msg = sb.toString();
 				baseBean.setData(list);
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				msg = MsgCode.webServiceCallMsg;
 			}else{
-				msg = respJson.getString("msg");
+				msg = respJson.getString("msg");//失败消息描述
 			}
 			baseBean.setMsg(msg);
 			baseBean.setCode(code);
@@ -619,11 +629,13 @@ public class IActivityServiceImpl implements IActivityService {
 						addRecordVoToList(list, jsonObj, apptDate);
 					}
 				}
-				//有查询结果
+				//有查询结果,按预约编号倒叙排序
+				apptIdDescSort(list);
 				baseBean.setData(list);
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
-				//没有查询结果,失败描述
-				baseBean.setMsg(respJson.getString("msg"));
+				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
 			}
 			baseBean.setCode(code);
 			
@@ -650,6 +662,23 @@ public class IActivityServiceImpl implements IActivityService {
 		recordVo.setApptDistrict("1");							//预约片区 -警司通没有返回,写死为1-梅沙片区
 		list.add(recordVo);
 	}
+	/**
+	 * 按预约编号倒叙排序
+	 */
+    private void apptIdDescSort(List<HotelApptHistoryRecordVo> list) throws Exception {
+        Collections.sort(list, new Comparator<HotelApptHistoryRecordVo>() {
+            @Override
+            public int compare(HotelApptHistoryRecordVo vo1, HotelApptHistoryRecordVo vo2) {
+                try {
+                    return vo1.getApptId().compareTo(vo2.getApptId());
+                } catch (Exception e) {
+                	logger.error("按预约编号倒叙排序异常", e);
+                }
+                return 0;
+            }
+        });
+        Collections.reverse(list);
+    }
 	
 	
 	/**
@@ -696,9 +725,10 @@ public class IActivityServiceImpl implements IActivityService {
 				apptDateDescSort(list);
 				//有查询结果
 				baseBean.setData(list);
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
-				//没有查询结果,失败描述
-				baseBean.setMsg(respJson.getString("msg"));
+				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
 			}
 			baseBean.setCode(code);
 			
@@ -778,7 +808,9 @@ public class IActivityServiceImpl implements IActivityService {
 			
 			String code = respJson.getString("code");	//返回状态码
 			String msg = respJson.getString("msg");		//返回消息描述
-			
+			if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				msg = MsgCode.webServiceCallMsg;
+			}
 			baseBean.setCode(code);
 			baseBean.setMsg(msg);
 			
@@ -826,9 +858,10 @@ public class IActivityServiceImpl implements IActivityService {
 				detail.setApptInterval(jsonObj.getString("yysjd"));	//预约时间段
 				detail.setApptStatus(jsonObj.getString("zt"));		//状态
 				baseBean.setData(detail);
+			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
-				//查询失败
-				baseBean.setMsg(respJson.getString("msg"));
+				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
 			}
 			baseBean.setCode(code);
 			
