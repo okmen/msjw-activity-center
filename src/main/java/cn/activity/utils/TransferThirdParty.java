@@ -22,6 +22,7 @@ public class TransferThirdParty {
 	private static Logger log = Logger.getLogger(TransferThirdParty.class);
 	/**
 	 * 获取预约场次信息
+	 * @Description: TODO(获取预约场次信息)
 	 * @param sourceOfCertification 获取来源
 	 * @return
 	 * @throws Exception
@@ -38,13 +39,20 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getNormalApptDate 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
 	/**
 	 * 获取指定场次个人配额信息
+	 * @Description: TODO(获取指定场次个人配额信息)
 	 * @param sourceOfCertification 获取来源
 	 * @return
 	 * @throws Exception
@@ -69,6 +77,7 @@ public class TransferThirdParty {
 	
 	/**
 	 * 个人预约信息写入
+	 * @Description: TODO(个人预约信息写入)
 	 * @param info 个人预约信息
 	 * @param sourceOfCertification 获取来源
 	 * @param openId 微信公众号唯一标识
@@ -101,6 +110,7 @@ public class TransferThirdParty {
 	
 	/**
      * 查询个人预约信息
+     * @Description: TODO(查询个人预约信息)
      * @param plateNo	号牌号码
      * @param plateType 号牌种类
      * @param vinLastFour 车架后4位
@@ -129,6 +139,7 @@ public class TransferThirdParty {
 	
 	/**
      * 取消个人预约信息
+     * @Description: TODO(取消个人预约信息)
      * @param apptId 预约编号
      * @param cancelReason 取消原因
 	 * @param sourceOfCertification 获取来源
@@ -201,7 +212,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelInfoByCode 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -234,7 +245,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("loginViaHotel 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -269,7 +280,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelQuotaInfo 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -315,7 +326,7 @@ public class TransferThirdParty {
 		sb.append("</request>");
 		
 		log.info("addHotelApptInfo 接口拼接xml请求报文:" + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -347,7 +358,7 @@ public class TransferThirdParty {
 		
 
 		log.info("getHotelApptHistoryByDate 接口xml请求参数: " + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -383,7 +394,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getHotelApptInfoByQueryType 接口xml请求参数: " + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -416,7 +427,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("cancelHotelApptInfo 接口xml请求参数: " + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {
@@ -446,7 +457,7 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getApptInfoDetailByApptId 接口xml请求参数: " + sb);
-		JSONObject respJson = null;
+		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().complexWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
 		} catch (Exception e) {

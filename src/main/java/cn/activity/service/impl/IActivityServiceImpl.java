@@ -66,22 +66,20 @@ public class IActivityServiceImpl implements IActivityService {
 			
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.getNormalApptDate(sourceOfCertification, url, method, userId, userPwd, key);
+			String code = respJson.getString("code");
 			
-			JSONObject jsonBody = respJson.getJSONObject("body");
-			if(jsonBody != null){
+			if(MsgCode.success.equals(code)){
 				//预约日期
-				String ccrq = jsonBody.get("ccrq").toString();	
-				/*//预约日期为空
-				if(StringUtil.isBlank(ccrq)){
-					baseBean.setCode("0001");
-					baseBean.setMsg("暂无可预约日期");
-					return baseBean;
-				}*/
+				String ccrq = respJson.getJSONObject("body").getString("ccrq");
 				baseBean.setData(ccrq);
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
-				baseBean.setCode(respJson.get("code").toString());
-				baseBean.setMsg(respJson.get("msg").toString());
+				baseBean.setMsg(respJson.getString("msg"));
 			}
+			baseBean.setCode(code);
 			
 //			String dateFormat = ActivityDateUtil.DateFormat(ccrq);	//17-JUN-10转化为2017-06-10
 			logger.info("获取预约场次信息采集返回结果:" + JSON.toJSONString(baseBean));
@@ -119,14 +117,14 @@ public class IActivityServiceImpl implements IActivityService {
 			logger.info("调用TransferThirdParty.getQuotaInfoByApptDate 耗时:" + (end - start));
 			
 			JSONObject jsonBody = respJson.getJSONObject("body");
-			String code = respJson.get("code").toString();
+			String code = respJson.getString("code");
 			
 			
 			if(jsonBody != null){
-				String yyqy = jsonBody.get("yyqy").toString();	//预约片区
-				String yyrq = jsonBody.get("yyrq").toString();	//预约日期
-				String zyype = jsonBody.get("zyype").toString();	//总预约配额
-				String kyype = jsonBody.get("kyype").toString();	//可预约配额
+				String yyqy = jsonBody.getString("yyqy");	//预约片区
+				String yyrq = jsonBody.getString("yyrq");	//预约日期
+				String zyype = jsonBody.getString("zyype");	//总预约配额
+				String kyype = jsonBody.getString("kyype");	//可预约配额
 				
 				ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();		//预约片区及时间段
 				vo.setApptDistrict(yyqy);
@@ -137,7 +135,7 @@ public class IActivityServiceImpl implements IActivityService {
 				baseBean.setData(vo);
 			}else{
 				//查询失败
-				baseBean.setMsg(respJson.get("msg").toString());
+				baseBean.setMsg(respJson.getString("msg"));
 			}
 			baseBean.setCode(code);
 			
@@ -172,12 +170,12 @@ public class IActivityServiceImpl implements IActivityService {
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.addNormalApptInfo(info, sourceOfCertification, openId, url, method, userId, userPwd, key);
 			
-			String code = respJson.get("code").toString();	//返回状态码 
-			String msg = respJson.get("msg").toString();	//返回消息描述
+			String code = respJson.getString("code");	//返回状态码
+			String msg = respJson.getString("msg");		//返回消息描述
 			
 			//预约成功
 			if(MsgCode.success.equals(code)){
-				String yyid = respJson.getJSONObject("body").get("yyid").toString();
+				String yyid = respJson.getJSONObject("body").getString("yyid");
 				baseBean.setData("预约编号为："+yyid);
 			}
 			
@@ -217,8 +215,8 @@ public class IActivityServiceImpl implements IActivityService {
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.getApptHistoryRecord(plateNo, plateType, vinLastFour, mobilePhone, sourceOfCertification, url, method, userId, userPwd, key);
 			
-			String code = respJson.get("code").toString();	//返回状态码 
-			String msg = respJson.get("msg").toString();	//返回消息描述
+			String code = respJson.getString("code");	//返回状态码
+			String msg = respJson.getString("msg");		//返回消息描述
 			//查询成功
 			if(MsgCode.success.equals(code)){
 				JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
@@ -228,12 +226,12 @@ public class IActivityServiceImpl implements IActivityService {
 						ApptHistoryRecordVo vo = new ApptHistoryRecordVo();
 						JSONObject jsonObject = (JSONObject) obj;
 						
-						String dateConvert = ActivityDateUtil.dateConvert(jsonObject.get("yyrq").toString());//10-06-17 00:00:00.0 转换为 2017-06-10
-						vo.setApptDate(dateConvert);							//预约日期
-						vo.setApptId(jsonObject.get("yyid").toString());		//预约编号
-						vo.setApptDistrict(jsonObject.get("yyqy").toString());	//预约片区
-						vo.setApptInterval(jsonObject.get("yysjd").toString());	//预约时间段
-						vo.setApptStatus(jsonObject.get("zt").toString());		//状态
+						String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+						vo.setApptDate(dateConvert);						//预约日期
+						vo.setApptId(jsonObject.getString("yyid"));			//预约编号
+						vo.setApptDistrict(jsonObject.getString("yyqy"));	//预约片区
+						vo.setApptInterval(jsonObject.getString("yysjd"));	//预约时间段
+						vo.setApptStatus(jsonObject.getString("zt"));		//状态
 						list.add(vo);
 					}
 					if(obj instanceof JSONArray){
@@ -243,12 +241,12 @@ public class IActivityServiceImpl implements IActivityService {
 								ApptHistoryRecordVo vo = new ApptHistoryRecordVo();
 								JSONObject jsonObject = jsonArray.getJSONObject(i);
 								
-								String dateConvert = ActivityDateUtil.dateConvert(jsonObject.get("yyrq").toString());//10-06-17 00:00:00.0 转换为 2017-06-10
-								vo.setApptDate(dateConvert);							//预约日期
-								vo.setApptId(jsonObject.get("yyid").toString());		//预约编号
-								vo.setApptDistrict(jsonObject.get("yyqy").toString());	//预约片区
-								vo.setApptInterval(jsonObject.get("yysjd").toString());	//预约时间段
-								vo.setApptStatus(jsonObject.get("zt").toString());		//状态
+								String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+								vo.setApptDate(dateConvert);						//预约日期
+								vo.setApptId(jsonObject.getString("yyid"));			//预约编号
+								vo.setApptDistrict(jsonObject.getString("yyqy"));	//预约片区
+								vo.setApptInterval(jsonObject.getString("yysjd"));	//预约时间段
+								vo.setApptStatus(jsonObject.getString("zt"));		//状态
 								list.add(vo);
 							}
 						}
@@ -297,8 +295,8 @@ public class IActivityServiceImpl implements IActivityService {
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.cancelNormalApptInfo(apptId, cancelReason, sourceOfCertification, url, method, userId, userPwd, key);
 			
-			String code = respJson.get("code").toString();	//返回状态码 
-			String msg = respJson.get("msg").toString();	//返回消息描述
+			String code = respJson.getString("code");	//返回状态码
+			String msg = respJson.getString("msg");		//返回消息描述
 			
 			baseBean.setCode(code);		
 			baseBean.setMsg(msg);
@@ -334,12 +332,12 @@ public class IActivityServiceImpl implements IActivityService {
 			//调用第三方接口
 			JSONObject respJson = TransferThirdParty.addTempApptInfo(info, sourceOfCertification, openId, url, method, userId, userPwd, key);
 			
-			String code = respJson.get("code").toString();	//返回状态码 
-			String msg = respJson.get("msg").toString();	//返回消息描述
+			String code = respJson.getString("code");	//返回状态码
+			String msg = respJson.getString("msg");		//返回消息描述
 			
 			//预约成功
 			if(MsgCode.success.equals(code)){
-				String yyid = respJson.getJSONObject("body").get("yyid").toString();
+				String yyid = respJson.getJSONObject("body").getString("yyid");
 				baseBean.setData("预约编号为:"+yyid);
 			}
 			
@@ -394,8 +392,10 @@ public class IActivityServiceImpl implements IActivityService {
 				}
 				baseBean.setData(list);
 				msg = respJson.getJSONObject("msg").getJSONObject("response").getString("msg");	//成功消息描述
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
-				msg = MsgCode.webServiceCallMsg;
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				msg = respJson.getString("msg");	//失败消息描述
 			}
@@ -448,8 +448,10 @@ public class IActivityServiceImpl implements IActivityService {
 			
 			String code = respJson.getString("code");	//返回状态码
 			String msg = respJson.getString("msg");		//返回消息描述
-			if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
-				msg = MsgCode.webServiceCallMsg;
+			if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}
 			baseBean.setCode(code);
 			baseBean.setMsg(msg);
@@ -496,7 +498,9 @@ public class IActivityServiceImpl implements IActivityService {
 				vo.setTotalQuota(jsonBody.getString("zyype"));				//总预约配额
 				vo.setLeftQuota(jsonBody.getString("kyype"));				//可预约配额
 				baseBean.setData(vo);
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
 				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
@@ -562,8 +566,10 @@ public class IActivityServiceImpl implements IActivityService {
 				}
 				msg = sb.toString();
 				baseBean.setData(list);
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
-				msg = MsgCode.webServiceCallMsg;
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
+				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				msg = respJson.getString("msg");//失败消息描述
 			}
@@ -632,7 +638,9 @@ public class IActivityServiceImpl implements IActivityService {
 				//有查询结果,按预约编号倒叙排序
 				apptIdDescSort(list);
 				baseBean.setData(list);
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
 				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
@@ -725,7 +733,9 @@ public class IActivityServiceImpl implements IActivityService {
 				apptDateDescSort(list);
 				//有查询结果
 				baseBean.setData(list);
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
 				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
@@ -807,9 +817,14 @@ public class IActivityServiceImpl implements IActivityService {
 			JSONObject respJson = TransferThirdParty.cancelHotelApptInfo(apptId, cancelReason, sourceOfCertification, url, method, userId, userPwd, key);
 			
 			String code = respJson.getString("code");	//返回状态码
-			String msg = respJson.getString("msg");		//返回消息描述
-			if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+			String msg = "";							//返回消息描述
+			
+			if(MsgCode.webServiceCallError.equals(code)){//1000
+				msg = "请求超时，请稍后重试";
+			}else if("9999".equals(code)){//警司通错误
 				msg = MsgCode.webServiceCallMsg;
+			}else{
+				msg = respJson.getString("msg");
 			}
 			baseBean.setCode(code);
 			baseBean.setMsg(msg);
@@ -858,7 +873,9 @@ public class IActivityServiceImpl implements IActivityService {
 				detail.setApptInterval(jsonObj.getString("yysjd"));	//预约时间段
 				detail.setApptStatus(jsonObj.getString("zt"));		//状态
 				baseBean.setData(detail);
-			}else if(MsgCode.webServiceCallError.equals(code) || "9999".equals(code)){//警司通错误
+			}else if(MsgCode.webServiceCallError.equals(code)){//1000
+				baseBean.setMsg("请求超时，请稍后重试");
+			}else if("9999".equals(code)){//警司通错误
 				baseBean.setMsg(MsgCode.webServiceCallMsg);
 			}else{
 				baseBean.setMsg(respJson.getString("msg"));//失败消息描述
