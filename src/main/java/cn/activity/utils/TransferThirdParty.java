@@ -71,7 +71,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("getQuotaInfoByApptDate 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -104,7 +111,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("addNormalApptInfo 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -133,7 +147,14 @@ public class TransferThirdParty {
 		.append("</request>");
 
 		log.info("getApptHistoryRecord 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -159,7 +180,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("cancelNormalApptInfo 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 	
@@ -191,7 +219,14 @@ public class TransferThirdParty {
 		.append("</request>");
 		
 		log.info("addTempApptInfo 接口 xml请求参数: " + sb);
-		JSONObject respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		JSONObject respJson = new JSONObject();
+		try {
+			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
+		} catch (Exception e) {
+			respJson.put("code", MsgCode.webServiceCallError);
+			respJson.put("msg", MsgCode.webServiceCallMsg);
+			throw e;
+		}
 		return respJson;
 	}
 
