@@ -1,6 +1,8 @@
 package cn.activity.utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -9,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.activity.bean.HotelApptInfoVo;
 import cn.activity.bean.HotelInfoVo;
 import cn.activity.bean.NormalApptInfoVo;
+import cn.sdk.exception.WebServiceException;
 import cn.sdk.util.MsgCode;
 import cn.sdk.webservice.WebServiceClient;
 
@@ -42,10 +45,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getNormalApptDate 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -74,10 +77,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getQuotaInfoByApptDate 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -114,10 +117,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("addNormalApptInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -150,10 +153,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getApptHistoryRecord 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -183,10 +186,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("cancelNormalApptInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -222,10 +225,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("addTempApptInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -250,10 +253,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getHotelInfoByCode 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -283,10 +286,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("loginViaHotel 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -318,10 +321,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getHotelQuotaInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -364,10 +367,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("addHotelApptInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -396,10 +399,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getHotelApptHistoryByDate 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -432,10 +435,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getHotelApptInfoByQueryType 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -465,10 +468,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().requestWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("cancelHotelApptInfo 接口异常:", wse);
 		}
 		return respJson;
 	}
@@ -495,10 +498,10 @@ public class TransferThirdParty {
 		JSONObject respJson = new JSONObject();
 		try {
 			respJson = WebServiceClient.getInstance().complexWebService(url, method, interfaceNumber, sb.toString(), userId, userPwd, key);
-		} catch (Exception e) {
+		} catch (WebServiceException wse) {
 			respJson.put("code", MsgCode.webServiceCallError);
 			respJson.put("msg", MsgCode.webServiceCallMsg);
-			throw e;
+			log.error("getApptInfoDetailByApptId 接口异常:", wse);
 		}
 		return respJson;
 	}
