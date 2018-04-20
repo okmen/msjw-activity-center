@@ -30,7 +30,7 @@ public class TransferThirdParty {
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject getNormalApptDate(String sourceOfCertification, String url, String method,
+	public static JSONObject getNormalApptDate(String sourceOfCertification,String apptDistrict, String url, String method,
 			String userId, String userPwd, String key) throws Exception{
 		
 		String interfaceNumber = "dbjq04";	//接口编号
@@ -38,7 +38,8 @@ public class TransferThirdParty {
 		//拼装xml数据
 		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request>")
-		.append("<yyly>").append("C").append("</yyly>")		//此处写死为C微信
+		.append("<yyly>").append(sourceOfCertification).append("</yyly>")		//此处写死为C微信
+		.append("<yyqy>").append(apptDistrict).append("</yyqy>")	
 		.append("</request>");
 		
 		log.info("getNormalApptDate 接口 xml请求参数: " + sb);
@@ -110,9 +111,15 @@ public class TransferThirdParty {
 		.append("<yysjd>").append(info.getApptInterval()).append("</yysjd>")//预约时间段	1-0点到12点,2-12点到24点
 		.append("<yyly>").append(sourceOfCertification).append("</yyly>")	//获取来源
 		.append("<openid>").append(openId).append("</openid>")				//微信公众号唯一标识			
-		.append("<yyjs>").append("1").append("</yyjs>")						//预约角色		默认1-个人
+		.append("<yyjs>").append("1").append("</yyjs>")
+		.append("<cch>").append(info.getCch()).append("</cch>")	
+		.append("<cfdd>").append(info.getCfdd()).append("</cfdd>")	
+		.append("<shi>").append(info.getShi()).append("</shi>")	
+		.append("<qu>").append(info.getQu()).append("</qu>")	//预约角色		默认1-个人
+		.append("<luduan>").append(info.getLuduan()).append("</luduan>")	
+		.append("<jiedao>").append(info.getJiedao()).append("</jiedao>")
 		.append("</request>");
-		
+
 		log.info("addNormalApptInfo 接口 xml请求参数: " + sb);
 		JSONObject respJson = new JSONObject();
 		try {
@@ -218,7 +225,13 @@ public class TransferThirdParty {
 		.append("<yysjd>").append(info.getApptInterval()).append("</yysjd>")//预约时间段	1-0点到12点,2-12点到24点
 		.append("<yyly>").append(sourceOfCertification).append("</yyly>")	//获取来源
 		.append("<openid>").append(openId).append("</openid>")				//微信公众号唯一标识			
-		.append("<yyjs>").append("1").append("</yyjs>")						//预约角色		默认1-个人
+		.append("<yyjs>").append("1").append("</yyjs>")	
+		.append("<cch>").append(info.getCch()).append("</cch>")	
+		.append("<cfdd>").append(info.getCfdd()).append("</cfdd>")	
+		.append("<shi>").append(info.getShi()).append("</shi>")	
+		.append("<qu>").append(info.getQu()).append("</qu>")	//预约角色		默认1-个人
+		.append("<luduan>").append(info.getLuduan()).append("</luduan>")	
+		.append("<jiedao>").append(info.getJiedao()).append("</jiedao>")//预约角色		默认1-个人
 		.append("</request>");
 		
 		log.info("addTempApptInfo 接口 xml请求参数: " + sb);
