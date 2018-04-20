@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 
 import cn.activity.bean.ApptDistrictAndTimeVo;
 import cn.activity.bean.ApptHistoryRecordVo;
@@ -52,10 +53,11 @@ public class IActivityServiceImpl implements IActivityService {
 	 * @param sourceOfCertification 获取来源
 	 * @throws Exception 
 	 */
-	public BaseBean getNormalApptDate(String sourceOfCertification) throws Exception {
+	public BaseBean getNormalApptDate(String sourceOfCertification ,String apptDistrict) throws Exception {
 		logger.info("获取预约场次信息采集WebService...");
 		
 		BaseBean baseBean = new BaseBean();	//创建返回信息
+		ArrayList<ApptDistrictAndTimeVo> list = new ArrayList<>();
 		
 		try {
 			String url = iActivityCached.getUrl(); 			//webservice请求url
@@ -65,21 +67,58 @@ public class IActivityServiceImpl implements IActivityService {
 			String key = iActivityCached.getKey();			//秘钥
 			
 			//调用第三方接口
-			JSONObject respJson = TransferThirdParty.getNormalApptDate(sourceOfCertification, url, method, userId, userPwd, key);
+			JSONObject respJson = TransferThirdParty.getNormalApptDate(sourceOfCertification, apptDistrict ,url, method, userId, userPwd, key);
 			String code = respJson.getString("code");
+			String msg = null;
 			
 			if(MsgCode.success.equals(code)){
-				//预约日期
-				String ccrq = respJson.getJSONObject("body").getString("ccrq");
-				baseBean.setData(ccrq);
+				JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
+//				JSONObject jsonBody = respJson.getJSONObject("body");
+				if(jsonBody != null){
+					Object obj = jsonBody.get("ret");
+					if(obj instanceof JSONObject){
+						ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();
+						JSONObject jsonObject = (JSONObject) obj;
+						
+						//String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+						vo.setApptDate(jsonObject.getString("yyrq"));		//预约日期
+						vo.setApptDistrict(jsonObject.getString("yyqy"));
+						vo.setApptInterval(jsonObject.getString("sjd"));
+						vo.setCch(jsonObject.getString("cch"));
+						vo.setCxrq(jsonObject.getString("cxrq"));
+						vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
+						vo.setTotalQuota(jsonObject.getString("yype"));
+						list.add(vo);
+					}
+					else if(obj instanceof JSONArray){
+						JSONArray jsonArray = (JSONArray) obj;
+						if(jsonArray != null){	//查询记录有多个
+							for(int i = 0; i < jsonArray.size(); i++){
+								ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();
+								JSONObject jsonObject = jsonArray.getJSONObject(i);
+								
+								//String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+								vo.setApptDate(jsonObject.getString("yyrq"));		//预约日期
+								vo.setApptDistrict(jsonObject.getString("yyqy"));
+								vo.setApptInterval(jsonObject.getString("sjd"));
+								vo.setCch(jsonObject.getString("cch"));
+								vo.setCxrq(jsonObject.getString("cxrq"));
+								vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
+								vo.setTotalQuota(jsonObject.getString("yype"));
+								list.add(vo);
+							}
+						}
+					}
+					baseBean.setData(list);
+				}
 			}else if(MsgCode.webServiceCallError.equals(code)){//1000
-				baseBean.setMsg("系统繁忙，请稍后重试");
+				msg = "系统繁忙，请稍后重试";
 			}else if("9999".equals(code)){//警司通错误
-				baseBean.setMsg(MsgCode.webServiceCallMsg);
-			}else{
-				baseBean.setMsg(respJson.getString("msg"));
+				msg = MsgCode.webServiceCallMsg;
 			}
 			baseBean.setCode(code);
+			baseBean.setMsg(msg);
+			
 			
 //			String dateFormat = ActivityDateUtil.DateFormat(ccrq);	//17-JUN-10转化为2017-06-10
 			logger.info("获取预约场次信息采集返回结果:" + JSON.toJSONString(baseBean));
