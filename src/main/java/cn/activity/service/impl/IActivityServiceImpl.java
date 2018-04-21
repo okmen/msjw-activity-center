@@ -254,11 +254,11 @@ public class IActivityServiceImpl implements IActivityService {
 			JSONObject respJson = TransferThirdParty.getApptHistoryRecord(plateNo, plateType, vinLastFour, mobilePhone, sourceOfCertification, url, method, userId, userPwd, key);
 			
 			String code = respJson.getString("code");	//返回状态码
-			String msg = respJson.getString("msg");		//返回消息描述
+			String msg = null;		//返回消息描述
 			//查询成功
 			if(MsgCode.success.equals(code)){
-				//JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
-				JSONObject jsonBody = respJson.getJSONObject("body");
+				JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
+//				JSONObject jsonBody = respJson.getJSONObject("body");
 				if(jsonBody != null){
 					Object obj = jsonBody.get("ret");
 					if(obj instanceof JSONObject){

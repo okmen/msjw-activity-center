@@ -36,11 +36,11 @@ public class TestActivityService {
 	@Test
 	public void testaddNormalApptInfo() throws Exception{
 		NormalApptInfoVo info = new NormalApptInfoVo();
-		info.setApptDate("2018-04-14");
+		info.setApptDate("2018-04-22");
 		info.setApptDistrict("DPPQ");//1-梅沙片区,2-大鹏片区 
 		info.setApptInterval("1");//1-0点到12点,2-12点到24点
 		info.setMobilePhone("15818534918");
-		info.setPlateNo("粤A12345");
+		info.setPlateNo("粤A12346");
 		info.setPlateType("02");
 		info.setVinLastFour("1234");
 		info.setCch("D10024");
@@ -56,24 +56,24 @@ public class TestActivityService {
 	@Test
 	public void testgetApptHistoryRecord() throws Exception{
 		//BaseBean baseBean = activityService.getApptHistoryRecord("粤A12345", "02", "1234", "15818534918", "C");
-		BaseBean baseBean = activityService.getApptHistoryRecord("粤A12345", "02", "1234", "13800138000", "C");
+		BaseBean baseBean = activityService.getApptHistoryRecord("粤A12347", "02", "1234", "13800138000", "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
 	@Test
 	public void testcancelNormalApptInfo() throws Exception{
-		BaseBean baseBean = activityService.cancelNormalApptInfo("DB100000000642", "开发测试", "C");
+		BaseBean baseBean = activityService.cancelNormalApptInfo("LS100000000681", "开发测试", "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
 	@Test
 	public void testaddTempApptInfo() throws Exception{
 		NormalApptInfoVo info = new NormalApptInfoVo();
-		info.setApptDate("2017-09-23");
-		info.setApptDistrict("1");//1-梅沙片区,2-大鹏片区 
+		info.setApptDate("2018-04-22");
+		info.setApptDistrict("DPPQLS");//1-梅沙片区,2-大鹏片区 
 		info.setApptInterval("2");//1-0点到12点,2-12点到24点
 		info.setMobilePhone("13800138000");
-		info.setPlateNo("粤A12345");
+		info.setPlateNo("粤A12347");
 		info.setPlateType("02");
 		info.setVinLastFour("1234");
 		info.setCch("D10024");
