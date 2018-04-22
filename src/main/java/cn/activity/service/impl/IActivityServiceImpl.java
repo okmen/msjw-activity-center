@@ -314,6 +314,8 @@ public class IActivityServiceImpl implements IActivityService {
 						vo.setApptDistrict(jsonObject.getString("yyqy"));	//预约片区
 						vo.setApptInterval(jsonObject.getString("yysjd"));	//预约时间段
 						vo.setApptStatus(jsonObject.getString("zt"));		//状态
+						vo.setMobilePhone(mobilePhone);
+						vo.setPlateNo(plateNo);
 						list.add(vo);
 					}
 					else if(obj instanceof JSONArray){
@@ -329,6 +331,8 @@ public class IActivityServiceImpl implements IActivityService {
 								vo.setApptDistrict(jsonObject.getString("yyqy"));	//预约片区
 								vo.setApptInterval(jsonObject.getString("yysjd"));	//预约时间段
 								vo.setApptStatus(jsonObject.getString("zt"));		//状态
+								vo.setMobilePhone(mobilePhone);
+								vo.setPlateNo(plateNo);
 								list.add(vo);
 							}
 						}

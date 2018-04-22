@@ -37,14 +37,14 @@ public class TestActivityService {
 	@Test
 	public void testaddNormalApptInfo() throws Exception{
 		NormalApptInfoVo info = new NormalApptInfoVo();
-		info.setApptDate("2018-04-22");
+		info.setApptDate("2018-04-29");
 		info.setApptDistrict("DPPQ");//1-梅沙片区,2-大鹏片区 
 		info.setApptInterval("1");//1-0点到12点,2-12点到24点
 		info.setMobilePhone("15818534918");
 		info.setPlateNo("粤A12346");
 		info.setPlateType("02");
 		info.setVinLastFour("1234");
-		info.setCch("D10024");
+		info.setCch("D10001");
 		info.setShi("测试");
 		info.setQu("测试");
 		info.setLuduan("测试");
