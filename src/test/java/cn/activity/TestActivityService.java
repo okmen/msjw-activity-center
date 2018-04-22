@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.activity.bean.HotelInfoVo;
 import cn.activity.bean.NormalApptInfoVo;
 import cn.activity.service.IActivityService;
 import cn.sdk.bean.BaseBean;
@@ -29,7 +30,7 @@ public class TestActivityService {
 	
 	@Test
 	public void testgetQuotaInfoByApptDate() throws Exception{
-		BaseBean baseBean = activityService.getQuotaInfoByApptDate("2018-04-14", "DPPQ", "C");
+		BaseBean baseBean = activityService.getQuotaInfoByApptDate("2018-04-24", "DPPQ", "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
@@ -84,5 +85,33 @@ public class TestActivityService {
 		info.setCfdd("测试");
 		BaseBean baseBean = activityService.addTempApptInfo(info, "C", "openid123123");
 		System.out.println(JSON.toJSONString(baseBean));//{"code":"0000","data":"预约编号为:DB100000000642","msg":"临时预约成功"}
+	}
+//	组织机构代码：100006585
+//	密码：888888
+	
+	@Test
+	public void testgetHotelInfoByCode() throws Exception{
+		BaseBean baseBean = activityService.getHotelInfoByCode("100006585");
+		System.out.println(JSON.toJSONString(baseBean));
+	}
+	
+	@Test
+	public void testloginViaHotel() throws Exception{
+		HotelInfoVo vo = new HotelInfoVo();
+		vo.setAgencyCode("100006585");
+		vo.setBranchCode("003");
+		BaseBean baseBean = activityService.loginViaHotel(vo, "888888", "C");
+		System.out.println(JSON.toJSONString(baseBean));
+	}
+	
+	
+	
+	@Test
+	public void testgetHotelQuotaInfo() throws Exception{
+		HotelInfoVo vo = new HotelInfoVo();
+		vo.setAgencyCode("100006585");
+		vo.setBranchCode("003");
+		BaseBean baseBean = activityService.getHotelQuotaInfo("2018-04-22", "DPPQ", vo, "C");
+		System.out.println(JSON.toJSONString(baseBean));
 	}
 }

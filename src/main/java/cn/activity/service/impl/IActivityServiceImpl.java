@@ -140,6 +140,7 @@ public class IActivityServiceImpl implements IActivityService {
 		logger.info("获取指定场次个人配额信息采集WebService...");
 		
 		BaseBean baseBean = new BaseBean();	//创建返回信息
+		ArrayList<ApptDistrictAndTimeVo> list = new ArrayList<>();
 		
 		try {
 			String url = iActivityCached.getUrl(); 			//webservice请求url
@@ -158,13 +159,45 @@ public class IActivityServiceImpl implements IActivityService {
 			String code = respJson.getString("code");
 			
 			if(MsgCode.success.equals(code)){
-				ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();
-				JSONObject jsonBody = respJson.getJSONObject("body");
-				vo.setApptDistrict(jsonBody.getString("yyqy"));	//预约片区
-				vo.setApptDate(jsonBody.getString("yyrq"));		//预约日期
-				vo.setTotalQuota(jsonBody.getString("zyype"));	//总预约配额
-				vo.setLeftQuota(jsonBody.getString("kyype"));	//可预约配额
-				baseBean.setData(vo);
+				JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
+//				JSONObject jsonBody = respJson.getJSONObject("body");
+				if(jsonBody != null){
+					Object obj = jsonBody.get("ret");
+					if(obj instanceof JSONObject){
+						ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();
+						JSONObject jsonObject = (JSONObject) obj;
+						
+						//String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+						vo.setApptDate(jsonObject.getString("yyrq"));		//预约日期
+						vo.setApptDistrict(jsonObject.getString("yyqy"));
+						vo.setApptInterval(jsonObject.getString("sjd"));
+						vo.setCch(jsonObject.getString("cch"));
+						vo.setCxrq(jsonObject.getString("cxrq"));
+						vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
+						vo.setTotalQuota(jsonObject.getString("yype"));
+						list.add(vo);
+					}
+					else if(obj instanceof JSONArray){
+						JSONArray jsonArray = (JSONArray) obj;
+						if(jsonArray != null){	//查询记录有多个
+							for(int i = 0; i < jsonArray.size(); i++){
+								ApptDistrictAndTimeVo vo = new ApptDistrictAndTimeVo();
+								JSONObject jsonObject = jsonArray.getJSONObject(i);
+								
+								//String dateConvert = ActivityDateUtil.dateConvert(jsonObject.getString("yyrq"));//10-06-17 00:00:00.0 转换为 2017-06-10
+								vo.setApptDate(jsonObject.getString("yyrq"));		//预约日期
+								vo.setApptDistrict(jsonObject.getString("yyqy"));
+								vo.setApptInterval(jsonObject.getString("sjd"));
+								vo.setCch(jsonObject.getString("cch"));
+								vo.setCxrq(jsonObject.getString("cxrq"));
+								vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
+								vo.setTotalQuota(jsonObject.getString("yype"));
+								list.add(vo);
+							}
+						}
+					}
+					baseBean.setData(list);
+				}
 			}else if(MsgCode.webServiceCallError.equals(code)){//1000
 				baseBean.setMsg("系统繁忙，请稍后重试");
 			}else if("9999".equals(code)){//警司通错误
@@ -466,7 +499,7 @@ public class IActivityServiceImpl implements IActivityService {
 		HotelInfoVo vo = new HotelInfoVo();
 		vo.setAgencyCode(jsonObj.getString("zzjgdm"));	//机构代码
 		vo.setBranchCode(jsonObj.getString("fdbm"));    //分店编号
-		vo.setHotelName(jsonObj.getString("gsmc"));     //酒店名称
+		vo.setHotelName(jsonObj.getString("jdmc"));     //酒店名称
 		vo.setBranchName(jsonObj.getString("fdmc"));    //分店名称
 		list.add(vo);
 	}
