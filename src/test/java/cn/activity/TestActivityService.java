@@ -30,7 +30,7 @@ public class TestActivityService {
 	
 	@Test
 	public void testgetQuotaInfoByApptDate() throws Exception{
-		BaseBean baseBean = activityService.getQuotaInfoByApptDate("2018-04-24", "DPPQ", "C");
+		BaseBean baseBean = activityService.getQuotaInfoByApptDate("2018-04-29", "DPPQ", "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	

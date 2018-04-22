@@ -30,6 +30,7 @@ import cn.activity.service.IActivityService;
 import cn.activity.utils.ActivityDateUtil;
 import cn.activity.utils.TransferThirdParty;
 import cn.sdk.bean.BaseBean;
+import cn.sdk.util.DateUtil;
 import cn.sdk.util.MsgCode;
 import cn.sdk.util.StringUtil;
 
@@ -70,7 +71,7 @@ public class IActivityServiceImpl implements IActivityService {
 			JSONObject respJson = TransferThirdParty.getNormalApptDate(sourceOfCertification, apptDistrict ,url, method, userId, userPwd, key);
 			String code = respJson.getString("code");
 			String msg = null;
-			
+			String nowDate = DateUtil.formatIso8601Day(new Date());
 			if(MsgCode.success.equals(code)){
 				JSONObject jsonBody = respJson.getJSONObject("msg").getJSONObject("response").getJSONObject("body");
 //				JSONObject jsonBody = respJson.getJSONObject("body");
@@ -88,7 +89,9 @@ public class IActivityServiceImpl implements IActivityService {
 						vo.setCxrq(jsonObject.getString("cxrq"));
 						vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
 						vo.setTotalQuota(jsonObject.getString("yype"));
-						list.add(vo);
+						if (nowDate.equals(jsonObject.getString("yyrq"))){
+							list.add(vo);
+						}
 					}
 					else if(obj instanceof JSONArray){
 						JSONArray jsonArray = (JSONArray) obj;
@@ -105,19 +108,26 @@ public class IActivityServiceImpl implements IActivityService {
 								vo.setCxrq(jsonObject.getString("cxrq"));
 								vo.setLeftQuota(Integer.parseInt(jsonObject.getString("yype"))-Integer.parseInt(jsonObject.getString("yyy")) + "");
 								vo.setTotalQuota(jsonObject.getString("yype"));
-								list.add(vo);
+								if (nowDate.equals(jsonObject.getString("yyrq"))){
+									list.add(vo);
+								}
 							}
 						}
 					}
-					baseBean.setData(list);
+					if (list != null && list.size()>0) {
+						baseBean.setData(list);
+					}else{
+						baseBean.setMsg("当前日期没有可预约出行日期");
+					}
 				}
 			}else if(MsgCode.webServiceCallError.equals(code)){//1000
 				msg = "系统繁忙，请稍后重试";
+				baseBean.setMsg(msg);
 			}else if("9999".equals(code)){//警司通错误
 				msg = MsgCode.webServiceCallMsg;
+				baseBean.setMsg(msg);
 			}
 			baseBean.setCode(code);
-			baseBean.setMsg(msg);
 			
 			
 //			String dateFormat = ActivityDateUtil.DateFormat(ccrq);	//17-JUN-10转化为2017-06-10
