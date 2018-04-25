@@ -24,7 +24,7 @@ public class TestActivityService {
 	
 	@Test
 	public void testgetNormalApptDate() throws Exception{
-		BaseBean baseBean = activityService.getNormalApptDate("C","DPPQ");
+		BaseBean baseBean = activityService.getNormalApptDate("Z","DPPQ");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
@@ -57,13 +57,14 @@ public class TestActivityService {
 	@Test
 	public void testgetApptHistoryRecord() throws Exception{
 		//BaseBean baseBean = activityService.getApptHistoryRecord("粤A12345", "02", "1234", "15818534918", "C");
-		BaseBean baseBean = activityService.getApptHistoryRecord("粤A12347", "02", "1234", "13800138000", "C");
+//		BaseBean baseBean = activityService.getApptHistoryRecord("粤A12347", "02", "1234", "13800138000", "C");
+		BaseBean baseBean = activityService.getApptHistoryRecord("", "", "", "13510021480", "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
 	@Test
 	public void testcancelNormalApptInfo() throws Exception{
-		BaseBean baseBean = activityService.cancelNormalApptInfo("LS100000000681", "开发测试", "C");
+		BaseBean baseBean = activityService.cancelNormalApptInfo("LS100000000681", null, "C");
 		System.out.println(JSON.toJSONString(baseBean));
 	}
 	
@@ -77,10 +78,10 @@ public class TestActivityService {
 		info.setPlateNo("粤A12347");
 		info.setPlateType("02");
 		info.setVinLastFour("1234");
-		info.setCch("D10024");
+		info.setCch("");
 		info.setShi("测试");
 		info.setQu("测试");
-		info.setLuduan("测试");
+		info.setLuduan("");
 		info.setJiedao("测试");
 		info.setCfdd("测试");
 		BaseBean baseBean = activityService.addTempApptInfo(info, "C", "openid123123");

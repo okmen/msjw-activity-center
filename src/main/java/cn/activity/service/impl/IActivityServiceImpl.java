@@ -343,6 +343,8 @@ public class IActivityServiceImpl implements IActivityService {
 				msg = "系统繁忙，请稍后重试";
 			}else if("9999".equals(code)){//警司通错误
 				msg = MsgCode.webServiceCallMsg;
+			}else{
+				msg = respJson.getString("msg");
 			}
 			
 			baseBean.setMsg(msg);
